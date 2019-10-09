@@ -28,6 +28,7 @@ RUN cd assets && npm install && npm run deploy
 # build project
 COPY priv priv
 COPY lib lib
+COPY .formatter.exs .formatter.exs
 RUN mix compile --warnings-as-errors
 
 CMD mix format --check-formatted && mix ecto.setup && mix test
