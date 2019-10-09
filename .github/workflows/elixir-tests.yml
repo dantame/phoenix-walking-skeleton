@@ -33,5 +33,11 @@ jobs:
         mix deps.get
     - name: Check Formatting
       run: mix format --check-formatted
+    - name: Setup Database
+      run: mix ecto.setup
+      env:
+        DATABASE_HOSTNAME: postgres
     - name: Run Tests
       run: mix test
+      env:
+        DATABASE_HOSTNAME: postgres
