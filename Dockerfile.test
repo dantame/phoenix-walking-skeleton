@@ -13,6 +13,7 @@ RUN mix local.hex --force && \
 
 # set build ENV
 ENV MIX_ENV=test
+ENV DATABASE_HOSTNAME=postgres
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
@@ -27,5 +28,6 @@ RUN cd assets && npm install && npm run deploy
 # build project
 COPY priv priv
 COPY lib lib
+mix compile --warnings-as-errors
 
-CMD mix ecto.setup && mix test
+CMD mix format --check-formatted && mix ecto.setup && mix test
