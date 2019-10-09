@@ -24,8 +24,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build the test Docker image
-      run: docker build . --file Dockerfile.test --tag elixir-tests:$(date +%s)
+      run: docker build . --file Dockerfile.test --tag elixir-tests
     - name: Run the test Docker image
-      run: docker run elixir-tests:$(date +%s)
+      run: docker run elixir-tests
       env:
         DATABASE_HOSTNAME: postgres
