@@ -21,11 +21,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    container:
+      image: elixir:1.9.1-slim
+
     steps:
     - uses: actions/checkout@v1
-    - name: Build the test Docker image
-      run: docker build . --file Dockerfile.test --tag elixir-tests
-    - name: Run the test Docker image
-      run: docker run elixir-tests
-      env:
-        DATABASE_HOSTNAME: postgres
+    - name: Install Dependencies
+      run: |
+        mix local.rebar --force
+        mix local.hex --force
+        mix deps.get
+    - name: Check Formatting
+      run: mix format --check-formatted
+    - name: Run Tests
+      run: mix test
