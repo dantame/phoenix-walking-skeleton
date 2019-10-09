@@ -5,7 +5,7 @@ config :walking_skeleton, WalkingSkeleton.Repo,
   username: "postgres",
   password: "postgres",
   database: "walking_skeleton_test",
-  hostname: "localhost",
+  hostname: System.get_env("DATABASE_HOSTNAME") || "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,

@@ -1,20 +1,31 @@
 FROM elixir:1.9.0-alpine
 
-ENV HOME=/opt/app
+# install build dependencies
+RUN apk add --update git build-base nodejs npm python
 
-# Install Hex + Rebar
-RUN mix do local.hex --force, local.rebar --force
+# prepare build dir
+RUN mkdir /app
+WORKDIR /app
 
-# Cache elixir deps
-COPY config/ $HOME/config/
-COPY mix.exs mix.lock $HOME/
+# install hex + rebar
+RUN mix local.hex --force && \
+    mix local.rebar --force
 
+# set build ENV
 ENV MIX_ENV=test
-RUN mix deps.get --only $MIX_ENV
 
-COPY . $HOME/
+# install mix dependencies
+COPY mix.exs mix.lock ./
+COPY config config
+RUN mix deps.get
+RUN mix deps.compile
 
-# Test
-WORKDIR $HOME
+# build assets
+COPY assets assets
+RUN cd assets && npm install && npm run deploy
+
+# build project
+COPY priv priv
+COPY lib lib
 
 CMD mix ecto.setup && mix test

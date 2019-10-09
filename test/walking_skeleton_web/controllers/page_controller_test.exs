@@ -1,5 +1,6 @@
 defmodule WalkingSkeletonWeb.PageControllerTest do
   use WalkingSkeletonWeb.ConnCase
+  alias WalkingSkeleton.Users.User
 
   setup %{conn: conn} do
     user = %User{email: "test@example.com"}
